@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <title>Лабораторна 5: Форма</title>
+</head>
+<body>
+    <h2>Введіть ваші дані</h2>
+    <form method="POST" action="/form">
+        <label>Ім'я (Текст):</label><br>
+        <input type="text" name="name" required><br><br>
+
+        <label>Email:</label><br>
+        <input type="email" name="email" required><br><br>
+
+        <label>Вік (Число):</label><br>
+        <input type="number" name="age" required><br><br>
+
+        <label>Група (Текст):</label><br>
+        <input type="text" name="group" required><br><br>
+
+        <button type="submit">Надіслати</button>
+    </form>
+
+    {% if name %}
+        <hr>
+        <h3>Отримані дані (Server Response):</h3>
+        <p><b>Ім'я:</b> {{ name }}</p>
+        <p><b>Email:</b> {{ email }}</p>
+        <p><b>Вік:</b> {{ age }}</p>
+        <p><b>Група:</b> {{ group }}</p>
+    {% endif %}
+</body>
+</html>

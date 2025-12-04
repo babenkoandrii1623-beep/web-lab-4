@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <title>Результат</title>
+    <style>
+        table { border-collapse: collapse; width: 50%; margin: 20px 0; }
+        td, th { border: 1px solid #ddd; padding: 8px; text-align: left; }
+        th { background-color: #f2f2f2; }
+        .file-success { color: green; font-weight: bold; margin-top: 10px; }
+    </style>
+</head>
+<body>
+    <h2>Дані успішно отримано!</h2>
+    
+    {% if saved_file %}
+        <div class="file-success">
+            ✅ Дані збережено у файл: {{ saved_file }}
+        </div>
+    {% endif %}
+
+    <p>Ви ввели наступну інформацію:</p>
+
+    <table>
+        <tr>
+            <th>Параметр</th>
+            <th>Значення</th>
+        </tr>
+        <tr>
+            <td>Ім'я</td>
+            <td>{{ name }}</td>
+        </tr>
+        <tr>
+            <td>Email</td>
+            <td>{{ email }}</td>
+        </tr>
+        <tr>
+            <td>Вік</td>
+            <td>{{ age }}</td>
+        </tr>
+        <tr>
+            <td>Група</td>
+            <td>{{ group }}</td>
+        </tr>
+    </table>
+
+    <a href="/form">Заповнити форму ще раз</a>
+</body>
+</html>
