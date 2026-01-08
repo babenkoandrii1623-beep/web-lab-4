@@ -6,7 +6,14 @@ app = Flask(__name__)
 
 @app.route('/')
 def home():
-    return "Перейдіть на <a href='/form'>/form</a>"
+    # Оновлена головна сторінка з посиланнями для зручності
+    return """
+        <h1>Лабораторна робота №7</h1>
+        <p>Перейдіть на <a href='/form'>/form</a> (Лаба №4)</p>
+        <p>Перейдіть на <a href='/hello2?name=Гість'>/hello2</a> (Лаба №7: Reflected XSS)</p>
+    """
+
+# --- МАРШРУТИ З ЛАБОРАТОРНОЇ №4 ---
 
 @app.route('/form', methods=['GET', 'POST'])
 def form_handler():
@@ -33,33 +40,31 @@ def form_handler():
         if not age:
             errors['age'] = "Поле 'Вік' не може бути порожнім"
         elif not age.isdigit():
-            errors['age'] = "Вік має бути цілим числом"
+            errors['age'] = "Вік має бути числом"
 
         if not group:
             errors['group'] = "Поле 'Група' не може бути порожнім"
 
-        if errors:
-            return render_template('form.html', errors=errors, data=data)
-        
-        timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-        filename = f"submission_{timestamp}.txt"
+        if not errors:
+            timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+            filename = f"submission_{timestamp}.txt"
 
-        try:
-            with open(filename, "w", encoding="utf-8") as f:
-                f.write(f"Ім'я: {name}\n")
-                f.write(f"Email: {email}\n")
-                f.write(f"Вік: {age}\n")
-                f.write(f"Група: {group}\n")
-                f.write(f"Час створення: {timestamp}\n")
-        except Exception as e:
-            print(f"Помилка запису файлу: {e}")
+            try:
+                with open(filename, "w", encoding="utf-8") as f:
+                    f.write(f"Ім'я: {name}\n")
+                    f.write(f"Email: {email}\n")
+                    f.write(f"Вік: {age}\n")
+                    f.write(f"Група: {group}\n")
+                    f.write(f"Час створення: {timestamp}\n")
+            except Exception as e:
+                print(f"Помилка запису файлу: {e}")
 
-        return redirect(url_for('result_handler', 
-                                name=name, 
-                                email=email, 
-                                age=age, 
-                                group=group,
-                                saved_file=filename))
+            return redirect(url_for('result_handler', 
+                                    name=name, 
+                                    email=email, 
+                                    age=age, 
+                                    group=group,
+                                    saved_file=filename))
 
     return render_template('form.html', data={})
 
@@ -75,8 +80,18 @@ def result_handler():
                            name=name, 
                            email=email, 
                            age=age, 
-                           group=group,
+                           group=group, 
                            saved_file=saved_file)
+
+# --- НОВИЙ МАРШРУТ ДЛЯ ЛАБОРАТОРНОЇ №7 (Reflected XSS) ---
+
+@app.route('/hello2')
+def hello2():
+    # Отримуємо ім'я з query-параметра URL (?name=...)
+    user_name = request.args.get('name', 'Гість')
+    
+    # Використовуємо твій шаблон hello.html.j2
+    return render_template('hello.html.j2', name=user_name)
 
 if __name__ == '__main__':
     app.run(debug=True, port=5000)
